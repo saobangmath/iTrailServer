@@ -1,0 +1,70 @@
+const express = require('express')
+const bodyParser = require('body-parser')
+const User = require('../models/users')
+const Record = require('../models/records')
+
+const recordsRouter = express.Router()
+recordsRouter.use(bodyParser.json());
+
+/* get all records in the leaderboard*/
+recordsRouter.get('/get/',(req, res, next) => {
+    Record.find({})
+        .then((records) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(records);
+        })
+        .catch((err) => {
+            res.statusCode = 404;
+            console.log(err);
+        });
+});
+
+/* retrieve all attempt of a specific user */
+recordsRouter.get('/get/:nric', (req, res, next) => {
+    Record.find({'nric' : req.params.nric})
+        .then((records) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(records);
+        })
+        .catch((err) => {
+            res.statusCode = 404;
+            console.log(err);
+        });
+});
+/* add a new attempt of for a specific user */
+recordsRouter.post('/add/', (req, res, next) => {
+    const newRecord = new Record({
+        nric : req.body.nric,
+        scoreA : req.body.scoreA,
+        errorA : req.body.errorA,
+        scoreB : req.body.scoreB,
+        errorB : req.body.errorB
+    });
+    User.findOne({'nric' : req.body.nric})
+        .then((user) => {
+            console.log(user);
+            if (user == null){
+                res.statusCode = 403;
+                res.json({"existed" : false, "message" : "the user has not registered in the database!"});
+            }
+            else{
+                Record.create(newRecord)
+                    .then((record) => {
+                        res.statusCode = 200;
+                        res.json({"existed" : true, "message" : `record ${record} for ${user} has successfully registered to the database!`});
+                    })
+                    .catch((err) => {
+                        res.statusCode = 404;
+                        console.log(err);
+                    });
+            }
+        })
+        .catch((err) => {
+            res.statusCode = 404;
+            console.log(err);
+        });
+});
+
+module.exports = recordsRouter;
