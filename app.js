@@ -12,8 +12,11 @@ var app = express();
 
 //connect MongoDB server and set up database connection
 const mongoose = require('mongoose');
+const username = 'trtai';
+const password = 'tai123456';
+const database = 'iTrailServer';
 const options = { useNewUrlParser: true,  useUnifiedTopology: true};
-const url = "mongodb://localhost:27017/iTrailDB";
+const url = `mongodb+srv://${username}:${password}@cluster0.rrugn.mongodb.net/${database}?retryWrites=true&w=majority`;
 const connect = mongoose.connect(url, options);
 connect.then((db) => {
   console.log("Connected correctly to server!");
