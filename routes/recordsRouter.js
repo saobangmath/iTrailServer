@@ -42,24 +42,11 @@ recordsRouter.post('/add/', (req, res, next) => {
         scoreB : req.body.scoreB,
         errorB : req.body.errorB
     });
-    User.findOne({'nric' : req.body.nric})
-        .then((user) => {
-            console.log(user);
-            if (user == null){
-                res.statusCode = 403;
-                res.json({"existed" : false, "message" : "the user has not registered in the database!"});
-            }
-            else{
-                Record.create(newRecord)
-                    .then((record) => {
-                        res.statusCode = 200;
-                        res.json({"existed" : true, "message" : `record ${record} for ${user} has successfully registered to the database!`});
-                    })
-                    .catch((err) => {
-                        res.statusCode = 404;
-                        console.log(err);
-                    });
-            }
+
+    Record.create(newRecord)
+        .then((record) => {
+            res.statusCode = 200;
+            res.json({"existed" : true, "message" : `record ${record} for ${user} has successfully registered to the database!`});
         })
         .catch((err) => {
             res.statusCode = 404;
