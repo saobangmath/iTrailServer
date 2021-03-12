@@ -46,7 +46,7 @@ recordsRouter.post('/add/', (req, res, next) => {
     Record.create(newRecord)
         .then((record) => {
             res.statusCode = 200;
-            res.json({"existed" : true, "message" : `record ${record} for ${user} has successfully registered to the database!`});
+            res.json({"existed" : true, "message" : `record ${record} has successfully registered to the database!`});
         })
         .catch((err) => {
             res.statusCode = 404;
