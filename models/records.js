@@ -8,7 +8,7 @@ const recordSchema = new Schema({
       required : true,
   },
   scoreA : {
-      type : Number,
+      type : String,
       required : true,
   },
   errorA : {
@@ -16,7 +16,7 @@ const recordSchema = new Schema({
       required : true,
   },
   scoreB : {
-    type : Number,
+    type : String,
     required : true,
   },
   errorB : {
